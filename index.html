@@ -20,23 +20,54 @@
     <header class="site-header">
       <div class="container header-inner">
         <a href="#accueil" class="logo" aria-label="Pure Tint accueil">
-          <span class="logo-mark">PT</span>
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 140 140" role="img" aria-label="Logo Pure Tint">
+              <defs>
+                <linearGradient id="pureTintBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0f7ef2" />
+                  <stop offset="100%" stop-color="#74c7ff" />
+                </linearGradient>
+                <linearGradient id="pureTintGray" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d8d8d8" />
+                  <stop offset="100%" stop-color="#8c9099" />
+                </linearGradient>
+              </defs>
+              <polygon points="70,10 18,40 18,103 70,132 70,28" fill="url(#pureTintGray)" />
+              <polygon points="70,10 122,40 122,103 70,132 70,28" fill="url(#pureTintBlue)" />
+              <polygon points="70,10 18,40 34,40 70,20" fill="#000000" />
+              <polygon points="70,10 122,40 106,40 70,20" fill="#0f7ef2" />
+              <rect x="30" y="52" width="26" height="22" fill="#ffffff" />
+              <rect x="30" y="78" width="26" height="29" fill="#ffffff" />
+              <rect x="30" y="52" width="6" height="55" fill="#000000" />
+              <rect x="50" y="52" width="6" height="55" fill="#000000" />
+              <rect x="30" y="72" width="26" height="6" fill="#000000" />
+              <rect x="84" y="52" width="24" height="55" fill="#ffffff" />
+              <rect x="84" y="52" width="6" height="55" fill="#0f7ef2" />
+              <rect x="96" y="52" width="6" height="55" fill="#0f7ef2" />
+            </svg>
+          </span>
           <span class="logo-text">
             <strong>Pure Tint</strong>
-            <small>Pellicules pour fenêtres</small>
+            <small data-i18n="logoTagline">Pellicules pour fenêtres</small>
           </span>
         </a>
 
         <nav class="main-nav" aria-label="Navigation principale">
-          <a href="#services">Services</a>
-          <a href="#avantages">Avantages</a>
-          <a href="#soumission">Soumission</a>
-          <a href="#contact">Contact</a>
+          <a href="#services" data-i18n="navServices">Services</a>
+          <a href="#avantages" data-i18n="navBenefits">Avantages</a>
+          <a href="#soumission" data-i18n="navQuote">Soumission</a>
+          <a href="#contact" data-i18n="navContact">Contact</a>
         </nav>
 
-        <a class="button button-primary header-cta" href="#soumission"
-          >Soumission gratuite</a
-        >
+        <div class="header-actions">
+          <div class="lang-toggle" role="group" aria-label="Language switcher">
+            <button type="button" class="lang-button is-active" data-lang="fr">FR</button>
+            <button type="button" class="lang-button" data-lang="en">EN</button>
+          </div>
+          <a class="button button-primary header-cta" href="#soumission" data-i18n="headerCta"
+            >Soumission gratuite</a
+          >
+        </div>
       </div>
     </header>
 
@@ -44,32 +75,51 @@
       <section class="hero">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow">Service résidentiel et commercial au Québec</span>
-            <h1>Plus d’intimité. Moins de chaleur.</h1>
-            <p class="hero-text">
+            <h1 data-i18n-html="heroTitle">
+              <span>Plus d’intimité.</span><span class="accent">Moins de chaleur.</span>
+            </h1>
+            <p class="hero-text" data-i18n="heroText">
               Pellicules pour fenêtres résidentielles et commerciales partout au
               Québec. Réduisez la chaleur, améliorez votre intimité et protégez
               votre intérieur contre les rayons UV.
             </p>
 
             <div class="hero-actions">
-              <a class="button button-primary" href="#soumission"
+              <a class="button button-primary" href="#soumission" data-i18n="heroPrimaryCta"
                 >Obtenir une soumission gratuite</a
               >
-              <a class="button button-secondary" href="#services"
+              <a class="button button-secondary" href="#services" data-i18n="heroSecondaryCta"
                 >Voir nos services</a
               >
             </div>
 
             <div class="trust-points" aria-label="Points de confiance">
               <div class="trust-card">
-                <strong>Estimation sans engagement</strong>
+                <span class="trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="m8 12 2.5 2.5L16 9" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <strong data-i18n="trustOne">Estimation sans engagement</strong>
               </div>
               <div class="trust-card">
-                <strong>Service local</strong>
+                <span class="trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="m8 12 2.5 2.5L16 9" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <strong data-i18n="trustTwo">Service local</strong>
               </div>
               <div class="trust-card">
-                <strong>Installation professionnelle</strong>
+                <span class="trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="m8 12 2.5 2.5L16 9" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <strong data-i18n="trustThree">Installation professionnelle</strong>
               </div>
             </div>
           </div>
@@ -77,13 +127,11 @@
           <div class="hero-visual">
             <div class="hero-photo-card">
               <img
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
-                alt="Maison moderne avec grandes fenêtres teintées"
+                src="https://images.pexels.com/photos/35018313/pexels-photo-35018313.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400"
+                alt="Façade résidentielle avec grandes fenêtres noires"
+                data-alt-fr="Façade résidentielle avec grandes fenêtres noires et vitrage teinté"
+                data-alt-en="Residential facade with large black-framed tinted windows"
               />
-              <div class="photo-badge">
-                <span>Jusqu’à 99 %</span>
-                <strong>de rayons UV bloqués</strong>
-              </div>
             </div>
           </div>
         </div>
@@ -91,38 +139,71 @@
 
       <section class="section" id="services">
         <div class="container">
-          <div class="section-heading">
-            <span class="eyebrow">Solutions Pure Tint</span>
-            <h2>Nos services</h2>
+          <div class="section-heading section-heading-centered">
+            <h2 data-i18n="servicesTitle">Nos services</h2>
+            <p data-i18n="servicesText">
+              Des pellicules performantes pour plus d’intimité, moins de
+              chaleur et une meilleure protection de vos espaces.
+            </p>
           </div>
 
           <div class="services-grid">
             <article class="service-card">
-              <div class="icon-circle">01</div>
-              <h3>Intimité de jour</h3>
-              <p>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                  <rect x="17" y="10" width="30" height="44" rx="2" fill="none" stroke="currentColor" stroke-width="4" />
+                  <line x1="32" y1="10" x2="32" y2="54" stroke="currentColor" stroke-width="4" />
+                  <line x1="17" y1="31" x2="32" y2="31" stroke="currentColor" stroke-width="4" />
+                  <circle cx="11" cy="36" r="6" fill="currentColor" />
+                </svg>
+              </div>
+              <h3 data-i18n="serviceOneTitle">Intimité de jour</h3>
+              <p data-i18n="serviceOneText">
                 Le film miroir limite la vue de l’extérieur pendant la journée.
               </p>
             </article>
 
             <article class="service-card">
-              <div class="icon-circle">02</div>
-              <h3>Réduction de chaleur</h3>
-              <p>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="4" />
+                  <line x1="32" y1="8" x2="32" y2="18" stroke="currentColor" stroke-width="4" />
+                  <line x1="32" y1="46" x2="32" y2="56" stroke="currentColor" stroke-width="4" />
+                  <line x1="8" y1="32" x2="18" y2="32" stroke="currentColor" stroke-width="4" />
+                  <line x1="46" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="4" />
+                  <line x1="15" y1="15" x2="22" y2="22" stroke="currentColor" stroke-width="4" />
+                  <line x1="42" y1="42" x2="49" y2="49" stroke="currentColor" stroke-width="4" />
+                  <line x1="15" y1="49" x2="22" y2="42" stroke="currentColor" stroke-width="4" />
+                  <line x1="42" y1="22" x2="49" y2="15" stroke="currentColor" stroke-width="4" />
+                </svg>
+              </div>
+              <h3 data-i18n="serviceTwoTitle">Réduction de chaleur</h3>
+              <p data-i18n="serviceTwoText">
                 Aide à garder la maison plus fraîche et réduit l’éblouissement.
               </p>
             </article>
 
             <article class="service-card">
-              <div class="icon-circle">03</div>
-              <h3>Protection UV</h3>
-              <p>Bloque jusqu’à 99 % des rayons UV.</p>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                  <path d="M32 10 50 17v14c0 11-8.4 21-18 23-9.6-2-18-12-18-23V17l18-7Z" fill="none" stroke="currentColor" stroke-width="4" />
+                  <text x="32" y="36" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">UV</text>
+                </svg>
+              </div>
+              <h3 data-i18n="serviceThreeTitle">Protection UV</h3>
+              <p data-i18n="serviceThreeText">Bloque jusqu’à 99 % des rayons UV.</p>
             </article>
 
             <article class="service-card">
-              <div class="icon-circle">04</div>
-              <h3>Commercial &amp; résidentiel</h3>
-              <p>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                  <rect x="9" y="26" width="18" height="24" fill="none" stroke="currentColor" stroke-width="4" />
+                  <rect x="30" y="18" width="13" height="32" fill="none" stroke="currentColor" stroke-width="4" />
+                  <rect x="46" y="10" width="9" height="40" fill="none" stroke="currentColor" stroke-width="4" />
+                </svg>
+              </div>
+              <h3 data-i18n="serviceFourTitle">Commercial &amp; résidentiel</h3>
+              <p data-i18n="serviceFourText">
                 Solutions adaptées aux maisons, commerces et bureaux.
               </p>
             </article>
@@ -133,170 +214,152 @@
       <section class="section section-alt" id="avantages">
         <div class="container why-grid">
           <div class="why-copy">
-            <span class="eyebrow">Une approche simple</span>
-            <h2>Pourquoi choisir Pure Tint?</h2>
+            <h2 data-i18n="whyTitle">Pourquoi choisir Pure Tint?</h2>
             <ul class="benefits-list">
-              <li>Installation propre et soignée</li>
-              <li>Film de qualité professionnelle</li>
-              <li>Soumission rapide</li>
-              <li>Service disponible partout au Québec</li>
-              <li>Approche simple et sans pression</li>
+              <li data-i18n="benefitOne">Installation propre et soignée</li>
+              <li data-i18n="benefitTwo">Film de qualité professionnelle</li>
+              <li data-i18n="benefitThree">Soumission rapide</li>
+              <li data-i18n="benefitFour">Service disponible partout au Québec</li>
+              <li data-i18n="benefitFive">Approche simple et sans pression</li>
             </ul>
           </div>
 
-          <aside class="stat-panel">
-            <div class="stat-card">
-              <span class="stat-number">QC</span>
-              <p>Interventions locales partout au Québec, pour maisons et commerces.</p>
-            </div>
-            <div class="stat-card">
-              <span class="stat-number">Pro</span>
-              <p>Installation soignée pour un résultat net, durable et discret.</p>
-            </div>
-          </aside>
+          <div class="why-photo-card">
+            <img
+              src="https://images.pexels.com/photos/12445995/pexels-photo-12445995.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200"
+              alt="Arrière de maison avec grandes fenêtres teintées"
+              data-alt-fr="Arrière de maison avec grandes fenêtres teintées"
+              data-alt-en="Backyard home exterior with large tinted windows"
+            />
+          </div>
         </div>
       </section>
 
       <section class="section" id="soumission">
-        <div class="container quote-layout">
-          <div class="section-heading quote-heading">
-            <span class="eyebrow">Demande rapide</span>
-            <h2>Recevez votre soumission gratuite</h2>
-            <p>
+        <div class="container quote-shell">
+          <div class="quote-aside">
+            <h2 data-i18n="quoteTitle">Recevez votre soumission gratuite</h2>
+            <p data-i18n="quoteText">
               Parlez-nous de votre projet et nous vous contacterons rapidement.
             </p>
 
             <div class="info-box">
-              <h3>Comment mesurer vos fenêtres</h3>
-              <p>
-                Mesurez seulement la surface vitrée, sans le cadre. Largeur x
-                hauteur.
-              </p>
+              <div class="info-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                  <path d="M12 48 47 13l5 5-35 35H12v-5Z" fill="none" stroke="currentColor" stroke-width="4" />
+                  <line x1="22" y1="38" x2="27" y2="43" stroke="currentColor" stroke-width="4" />
+                  <line x1="18" y1="28" x2="23" y2="33" stroke="currentColor" stroke-width="4" />
+                  <line x1="28" y1="32" x2="33" y2="37" stroke="currentColor" stroke-width="4" />
+                </svg>
+              </div>
+              <div>
+                <h3 data-i18n="measureTitle">Comment mesurer vos fenêtres</h3>
+                <p data-i18n="measureText">
+                  Mesurez seulement la surface vitrée, sans le cadre. Largeur x hauteur.
+                </p>
+              </div>
             </div>
           </div>
 
           <form class="quote-form" action="#" method="post">
             <div class="form-grid">
               <label>
-                <span>Prénom</span>
-                <input
-                  type="text"
-                  name="prenom"
-                  autocomplete="given-name"
-                  required
-                />
+                <span data-i18n="firstName">Prénom</span>
+                <input type="text" name="prenom" autocomplete="given-name" required />
               </label>
 
               <label>
-                <span>Nom</span>
-                <input
-                  type="text"
-                  name="nom"
-                  autocomplete="family-name"
-                  required
-                />
+                <span data-i18n="lastName">Nom</span>
+                <input type="text" name="nom" autocomplete="family-name" required />
               </label>
 
               <label>
-                <span>Adresse courriel</span>
-                <input
-                  type="email"
-                  name="courriel"
-                  autocomplete="email"
-                  required
-                />
+                <span data-i18n="email">Adresse courriel</span>
+                <input type="email" name="courriel" autocomplete="email" required />
               </label>
 
               <label>
-                <span>Numéro de téléphone</span>
-                <input
-                  type="tel"
-                  name="telephone"
-                  autocomplete="tel"
-                  required
-                />
+                <span data-i18n="phone">Numéro de téléphone</span>
+                <input type="tel" name="telephone" autocomplete="tel" required />
               </label>
 
               <label>
-                <span>Ville</span>
-                <input
-                  type="text"
-                  name="ville"
-                  autocomplete="address-level2"
-                  required
-                />
+                <span data-i18n="city">Ville</span>
+                <input type="text" name="ville" autocomplete="address-level2" required />
               </label>
 
               <label>
-                <span>Type de projet</span>
+                <span data-i18n="projectType">Type de projet</span>
                 <select name="type_projet" required>
-                  <option value="residentiel">Résidentiel</option>
-                  <option value="commercial">Commercial</option>
+                  <option value="residentiel" data-i18n="typeResidential">Résidentiel</option>
+                  <option value="commercial" data-i18n="typeCommercial">Commercial</option>
                 </select>
               </label>
 
               <fieldset class="form-group full-width">
-                <legend>Quel problème voulez-vous résoudre?</legend>
+                <legend data-i18n="problemLegend">Quel problème voulez-vous résoudre?</legend>
                 <div class="checkbox-grid">
                   <label
                     ><input type="checkbox" name="problemes[]" value="intimite" />
-                    Intimité</label
+                    <span data-i18n="problemPrivacy">Intimité</span></label
                   >
                   <label
                     ><input type="checkbox" name="problemes[]" value="chaleur" />
-                    Chaleur</label
+                    <span data-i18n="problemHeat">Chaleur</span></label
                   >
                   <label
                     ><input type="checkbox" name="problemes[]" value="uv" />
-                    UV</label
+                    <span data-i18n="problemUv">UV</span></label
                   >
                   <label
                     ><input type="checkbox" name="problemes[]" value="securite" />
-                    Sécurité</label
+                    <span data-i18n="problemSecurity">Sécurité</span></label
                   >
                 </div>
               </fieldset>
 
               <label>
-                <span>Envergure du projet</span>
+                <span data-i18n="projectScope">Envergure du projet</span>
                 <select name="envergure" required>
-                  <option value="une_fenetre">Une fenêtre</option>
-                  <option value="quelques_fenetres">Quelques fenêtres</option>
-                  <option value="facade_complete">Façade complète</option>
-                  <option value="batiment_complet">Maison/Bâtiment complet</option>
+                  <option value="une_fenetre" data-i18n="scopeOne">Une fenêtre</option>
+                  <option value="quelques_fenetres" data-i18n="scopeFew">Quelques fenêtres</option>
+                  <option value="facade_complete" data-i18n="scopeFacade">Façade complète</option>
+                  <option value="batiment_complet" data-i18n="scopeFull">Maison/Bâtiment complet</option>
                 </select>
               </label>
 
               <label>
-                <span>Âge des fenêtres</span>
+                <span data-i18n="windowAge">Âge des fenêtres</span>
                 <select name="age_fenetres" required>
-                  <option value="plus_de_10_ans">+ de 10 ans</option>
-                  <option value="moins_de_10_ans">- de 10 ans</option>
-                  <option value="inconnu">Je ne sais pas</option>
+                  <option value="plus_de_10_ans" data-i18n="ageOver10">+ de 10 ans</option>
+                  <option value="moins_de_10_ans" data-i18n="ageUnder10">- de 10 ans</option>
+                  <option value="inconnu" data-i18n="ageUnknown">Je ne sais pas</option>
                 </select>
               </label>
 
               <label class="full-width">
-                <span>Mesures des fenêtres (optionnel)</span>
+                <span data-i18n="measureField">Mesures des fenêtres (optionnel)</span>
                 <input
                   type="text"
                   name="mesures"
                   placeholder="ex. 120 po x 60 po"
+                  data-placeholder-fr="ex. 120 po x 60 po"
+                  data-placeholder-en='e.g. 120" x 60"'
                 />
               </label>
 
               <label class="full-width">
-                <span>Meilleur moment pour vous contacter</span>
+                <span data-i18n="bestTime">Meilleur moment pour vous contacter</span>
                 <select name="moment_contact" required>
-                  <option value="am">AM</option>
-                  <option value="debut_pm">Début PM</option>
-                  <option value="fin_pm">Fin PM</option>
-                  <option value="soiree">Soirée</option>
+                  <option value="am" data-i18n="timeAm">AM</option>
+                  <option value="debut_pm" data-i18n="timeEarlyPm">Début PM</option>
+                  <option value="fin_pm" data-i18n="timeLatePm">Fin PM</option>
+                  <option value="soiree" data-i18n="timeEvening">Soirée</option>
                 </select>
               </label>
             </div>
 
-            <button type="submit" class="button button-primary form-submit">
+            <button type="submit" class="button button-primary form-submit" data-i18n="submitCta">
               Envoyer ma demande
             </button>
           </form>
@@ -307,20 +370,283 @@
     <footer class="site-footer" id="contact">
       <div class="container footer-inner">
         <a href="#accueil" class="logo footer-logo" aria-label="Pure Tint accueil">
-          <span class="logo-mark">PT</span>
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 140 140" role="img" aria-label="Logo Pure Tint">
+              <defs>
+                <linearGradient id="pureTintBlueFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0f7ef2" />
+                  <stop offset="100%" stop-color="#74c7ff" />
+                </linearGradient>
+                <linearGradient id="pureTintGrayFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d8d8d8" />
+                  <stop offset="100%" stop-color="#8c9099" />
+                </linearGradient>
+              </defs>
+              <polygon points="70,10 18,40 18,103 70,132 70,28" fill="url(#pureTintGrayFooter)" />
+              <polygon points="70,10 122,40 122,103 70,132 70,28" fill="url(#pureTintBlueFooter)" />
+              <polygon points="70,10 18,40 34,40 70,20" fill="#000000" />
+              <polygon points="70,10 122,40 106,40 70,20" fill="#0f7ef2" />
+              <rect x="30" y="52" width="26" height="22" fill="#ffffff" />
+              <rect x="30" y="78" width="26" height="29" fill="#ffffff" />
+              <rect x="30" y="52" width="6" height="55" fill="#000000" />
+              <rect x="50" y="52" width="6" height="55" fill="#000000" />
+              <rect x="30" y="72" width="26" height="6" fill="#000000" />
+              <rect x="84" y="52" width="24" height="55" fill="#ffffff" />
+              <rect x="84" y="52" width="6" height="55" fill="#0f7ef2" />
+              <rect x="96" y="52" width="6" height="55" fill="#0f7ef2" />
+            </svg>
+          </span>
           <span class="logo-text">
             <strong>Pure Tint</strong>
-            <small>Pellicules pour fenêtres</small>
+            <small data-i18n="logoTagline">Pellicules pour fenêtres</small>
           </span>
         </a>
 
         <div class="footer-details">
-          <a href="mailto:info@puretint.com">info@puretint.com</a>
-          <a href="tel:5551234567">(555) 123-4567</a>
-          <p>Services disponibles partout au Québec</p>
-          <p>© Pure Tint</p>
+          <a href="mailto:info@puretint.com" class="footer-item">
+            <span class="footer-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="m4 7 8 7 8-7" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span>info@puretint.com</span>
+          </a>
+          <a href="tel:5551234567" class="footer-item">
+            <span class="footer-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6.6 3h3.1l1.2 4.5-1.9 1.9a15.7 15.7 0 0 0 5.6 5.6l1.9-1.9 4.5 1.2v3.1c0 .8-.6 1.5-1.4 1.5A16.7 16.7 0 0 1 4.9 4.4C4.9 3.6 5.6 3 6.6 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span>(555) 123-4567</span>
+          </a>
+          <div class="footer-item">
+            <span class="footer-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span data-i18n="footerCoverage">Services disponibles partout au Québec</span>
+          </div>
+          <div class="footer-item">
+            <span>© Pure Tint</span>
+          </div>
         </div>
       </div>
     </footer>
+
+    <script>
+      const translations = {
+        fr: {
+          pageTitle: "Pure Tint | Pellicules pour fenêtres au Québec",
+          pageDescription:
+            "Pure Tint offre des pellicules pour fenêtres résidentielles et commerciales partout au Québec. Réduisez la chaleur, améliorez votre intimité et bloquez les UV.",
+          logoTagline: "Pellicules pour fenêtres",
+          navServices: "Services",
+          navBenefits: "Avantages",
+          navQuote: "Soumission",
+          navContact: "Contact",
+          headerCta: "Soumission gratuite",
+          heroEyebrow: "Service résidentiel et commercial au Québec",
+          heroTitle:
+            "<span>Plus d’intimité.</span><span class=\"accent\">Moins de chaleur.</span>",
+          heroText:
+            "Pellicules pour fenêtres résidentielles et commerciales partout au Québec. Réduisez la chaleur, améliorez votre intimité et protégez votre intérieur contre les rayons UV.",
+          heroPrimaryCta: "Obtenir une soumission gratuite",
+          heroSecondaryCta: "Voir nos services",
+          trustOne: "Estimation sans engagement",
+          trustTwo: "Service local",
+          trustThree: "Installation professionnelle",
+          servicesEyebrow: "Solutions Pure Tint",
+          servicesTitle: "Nos services",
+          servicesText:
+            "Des pellicules performantes pour plus d’intimité, moins de chaleur et une meilleure protection de vos espaces.",
+          serviceOneTitle: "Intimité de jour",
+          serviceOneText: "Le film miroir limite la vue de l’extérieur pendant la journée.",
+          serviceTwoTitle: "Réduction de chaleur",
+          serviceTwoText:
+            "Aide à garder la maison plus fraîche et réduit l’éblouissement.",
+          serviceThreeTitle: "Protection UV",
+          serviceThreeText: "Bloque jusqu’à 99 % des rayons UV.",
+          serviceFourTitle: "Commercial & résidentiel",
+          serviceFourText: "Solutions adaptées aux maisons, commerces et bureaux.",
+          whyEyebrow: "Une approche simple",
+          whyTitle: "Pourquoi choisir Pure Tint?",
+          benefitOne: "Installation propre et soignée",
+          benefitTwo: "Film de qualité professionnelle",
+          benefitThree: "Soumission rapide",
+          benefitFour: "Service disponible partout au Québec",
+          benefitFive: "Approche simple et sans pression",
+          statOne: "Interventions locales partout au Québec, pour maisons et commerces.",
+          statTwo: "Installation soignée pour un résultat net, durable et discret.",
+          quoteEyebrow: "Demande rapide",
+          quoteTitle: "Recevez votre soumission gratuite",
+          quoteText: "Parlez-nous de votre projet et nous vous contacterons rapidement.",
+          measureTitle: "Comment mesurer vos fenêtres",
+          measureText:
+            "Mesurez seulement la surface vitrée, sans le cadre. Largeur x hauteur.",
+          firstName: "Prénom",
+          lastName: "Nom",
+          email: "Adresse courriel",
+          phone: "Numéro de téléphone",
+          city: "Ville",
+          projectType: "Type de projet",
+          typeResidential: "Résidentiel",
+          typeCommercial: "Commercial",
+          problemLegend: "Quel problème voulez-vous résoudre?",
+          problemPrivacy: "Intimité",
+          problemHeat: "Chaleur",
+          problemUv: "UV",
+          problemSecurity: "Sécurité",
+          projectScope: "Envergure du projet",
+          scopeOne: "Une fenêtre",
+          scopeFew: "Quelques fenêtres",
+          scopeFacade: "Façade complète",
+          scopeFull: "Maison/Bâtiment complet",
+          windowAge: "Âge des fenêtres",
+          ageOver10: "+ de 10 ans",
+          ageUnder10: "- de 10 ans",
+          ageUnknown: "Je ne sais pas",
+          measureField: "Mesures des fenêtres (optionnel)",
+          bestTime: "Meilleur moment pour vous contacter",
+          timeAm: "AM",
+          timeEarlyPm: "Début PM",
+          timeLatePm: "Fin PM",
+          timeEvening: "Soirée",
+          submitCta: "Envoyer ma demande",
+          footerCoverage: "Services disponibles partout au Québec"
+        },
+        en: {
+          pageTitle: "Pure Tint | Window Film Services in Quebec",
+          pageDescription:
+            "Pure Tint provides residential and commercial window film services across Quebec. Reduce heat, improve privacy, and block UV rays.",
+          logoTagline: "Window Film Services",
+          navServices: "Services",
+          navBenefits: "Benefits",
+          navQuote: "Quote",
+          navContact: "Contact",
+          headerCta: "Free quote",
+          heroEyebrow: "Residential and commercial service across Quebec",
+          heroTitle:
+            "<span>More privacy.</span><span class=\"accent\">Less heat.</span>",
+          heroText:
+            "Residential and commercial window film services across Quebec. Reduce heat, improve privacy, and protect your interior from UV rays.",
+          heroPrimaryCta: "Get a free quote",
+          heroSecondaryCta: "View our services",
+          trustOne: "No-obligation estimate",
+          trustTwo: "Local service",
+          trustThree: "Professional installation",
+          servicesEyebrow: "Pure Tint Solutions",
+          servicesTitle: "Our services",
+          servicesText:
+            "High-performance window films for more privacy, less heat, and better protection for your spaces.",
+          serviceOneTitle: "Daytime privacy",
+          serviceOneText: "Reflective film limits outside visibility during the day.",
+          serviceTwoTitle: "Heat reduction",
+          serviceTwoText: "Helps keep interiors cooler and reduces glare.",
+          serviceThreeTitle: "UV protection",
+          serviceThreeText: "Blocks up to 99% of UV rays.",
+          serviceFourTitle: "Commercial & residential",
+          serviceFourText: "Solutions tailored for homes, stores, and offices.",
+          whyEyebrow: "A simple approach",
+          whyTitle: "Why choose Pure Tint?",
+          benefitOne: "Clean and careful installation",
+          benefitTwo: "Professional-grade film",
+          benefitThree: "Fast quote turnaround",
+          benefitFour: "Service available across Quebec",
+          benefitFive: "Simple, no-pressure approach",
+          statOne: "Local service across Quebec for homes and commercial properties.",
+          statTwo: "Careful installation for a clean, durable, discreet finish.",
+          quoteEyebrow: "Quick request",
+          quoteTitle: "Get your free quote",
+          quoteText: "Tell us about your project and we will contact you quickly.",
+          measureTitle: "How to measure your windows",
+          measureText: "Measure only the glass surface, without the frame. Width x height.",
+          firstName: "First name",
+          lastName: "Last name",
+          email: "Email address",
+          phone: "Phone number",
+          city: "City",
+          projectType: "Project type",
+          typeResidential: "Residential",
+          typeCommercial: "Commercial",
+          problemLegend: "What problem are you trying to solve?",
+          problemPrivacy: "Privacy",
+          problemHeat: "Heat",
+          problemUv: "UV",
+          problemSecurity: "Security",
+          projectScope: "Project scope",
+          scopeOne: "One window",
+          scopeFew: "A few windows",
+          scopeFacade: "Full facade",
+          scopeFull: "Entire home/building",
+          windowAge: "Window age",
+          ageOver10: "Over 10 years",
+          ageUnder10: "Under 10 years",
+          ageUnknown: "I don't know",
+          measureField: "Window measurements (optional)",
+          bestTime: "Best time to contact you",
+          timeAm: "AM",
+          timeEarlyPm: "Early PM",
+          timeLatePm: "Late PM",
+          timeEvening: "Evening",
+          submitCta: "Send my request",
+          footerCoverage: "Services available across Quebec"
+        }
+      };
+
+      const html = document.documentElement;
+      const title = document.querySelector("title");
+      const description = document.querySelector('meta[name="description"]');
+      const translatable = document.querySelectorAll("[data-i18n]");
+      const translatableHtml = document.querySelectorAll("[data-i18n-html]");
+      const placeholderFields = document.querySelectorAll("[data-placeholder-fr]");
+      const altFields = document.querySelectorAll("[data-alt-fr]");
+      const langButtons = document.querySelectorAll(".lang-button");
+
+      function applyLanguage(lang) {
+        const dict = translations[lang];
+        html.lang = lang;
+        title.textContent = dict.pageTitle;
+        description.setAttribute("content", dict.pageDescription);
+
+        translatable.forEach((node) => {
+          const key = node.dataset.i18n;
+          if (dict[key]) {
+            node.textContent = dict[key];
+          }
+        });
+
+        translatableHtml.forEach((node) => {
+          const key = node.dataset.i18nHtml;
+          if (dict[key]) {
+            node.innerHTML = dict[key];
+          }
+        });
+
+        placeholderFields.forEach((field) => {
+          field.placeholder = lang === "fr" ? field.dataset.placeholderFr : field.dataset.placeholderEn;
+        });
+
+        altFields.forEach((field) => {
+          field.alt = lang === "fr" ? field.dataset.altFr : field.dataset.altEn;
+        });
+
+        langButtons.forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.lang === lang);
+        });
+
+        window.localStorage.setItem("pureTintLanguage", lang);
+      }
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+      });
+
+      const savedLanguage = window.localStorage.getItem("pureTintLanguage");
+      const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith("fr") ? "fr" : "en";
+      applyLanguage(savedLanguage || browserLanguage || "fr");
+    </script>
   </body>
 </html>
