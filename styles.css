@@ -553,6 +553,28 @@ select {
   margin-top: 1.2rem;
 }
 
+.form-status {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.form-status-pending {
+  background: #eaf4ff;
+  color: var(--primary-dark);
+}
+
+.form-status-success {
+  background: #e9f8ef;
+  color: #1d6b3a;
+}
+
+.form-status-error {
+  background: #fff0f0;
+  color: #a43030;
+}
+
 .site-footer {
   background: var(--surface-strong);
   color: white;

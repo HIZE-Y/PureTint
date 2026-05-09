@@ -261,7 +261,7 @@
             </div>
           </div>
 
-          <form class="quote-form" action="#" method="post">
+          <form class="quote-form" id="quote-form" action="#" method="post" novalidate>
             <div class="form-grid">
               <label>
                 <span data-i18n="firstName">Prénom</span>
@@ -358,6 +358,14 @@
                 </select>
               </label>
             </div>
+
+            <div
+              class="form-status"
+              id="form-status"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></div>
 
             <button type="submit" class="button button-primary form-submit" data-i18n="submitCta">
               Envoyer ma demande
@@ -604,7 +612,9 @@
       const placeholderFields = document.querySelectorAll("[data-placeholder-fr]");
       const altFields = document.querySelectorAll("[data-alt-fr]");
       const langButtons = document.querySelectorAll(".lang-button");
-
+      const quoteForm = document.getElementById("quote-form");
+      const formStatus = document.getElementById("form-status");
+      const apiBase = window.PURETINT_API_BASE || "http://127.0.0.1:3000/api";
       function applyLanguage(lang) {
         const dict = translations[lang];
         html.lang = lang;
@@ -643,6 +653,78 @@
       langButtons.forEach((button) => {
         button.addEventListener("click", () => applyLanguage(button.dataset.lang));
       });
+
+      function setFormStatus(kind, message) {
+        if (!formStatus) return;
+        formStatus.hidden = false;
+        formStatus.className = "form-status";
+        formStatus.classList.add(`form-status-${kind}`);
+        formStatus.textContent = message;
+      }
+
+      function serializeForm(form) {
+        const formData = new FormData(form);
+        return {
+          prenom: formData.get("prenom")?.toString().trim() || "",
+          nom: formData.get("nom")?.toString().trim() || "",
+          courriel: formData.get("courriel")?.toString().trim() || "",
+          telephone: formData.get("telephone")?.toString().trim() || "",
+          ville: formData.get("ville")?.toString().trim() || "",
+          type_projet: formData.get("type_projet")?.toString() || "",
+          problemes: formData.getAll("problemes[]").map((value) => value.toString()),
+          envergure: formData.get("envergure")?.toString() || "",
+          age_fenetres: formData.get("age_fenetres")?.toString() || "",
+          mesures: formData.get("mesures")?.toString().trim() || "",
+          moment_contact: formData.get("moment_contact")?.toString() || ""
+        };
+      }
+
+      if (quoteForm) {
+        quoteForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          if (!quoteForm.reportValidity()) {
+            return;
+          }
+
+          const isFrench = document.documentElement.lang === "fr";
+          const pendingMessage = isFrench
+            ? "Envoi de votre demande..."
+            : "Sending your request...";
+          const successMessage = isFrench
+            ? "Votre demande a bien ete envoyee."
+            : "Your request has been sent.";
+          const errorMessage = isFrench
+            ? "Impossible d'envoyer la demande pour le moment."
+            : "We could not send your request right now.";
+
+          const submitButton = quoteForm.querySelector(".form-submit");
+          submitButton.disabled = true;
+          setFormStatus("pending", pendingMessage);
+
+          try {
+            const response = await fetch(`${apiBase}/quotes`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(serializeForm(quoteForm))
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            quoteForm.reset();
+            setFormStatus("success", successMessage);
+          } catch (error) {
+            console.error(error);
+            setFormStatus("error", errorMessage);
+          } finally {
+            submitButton.disabled = false;
+          }
+        });
+      }
 
       const savedLanguage = window.localStorage.getItem("pureTintLanguage");
       const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith("fr") ? "fr" : "en";

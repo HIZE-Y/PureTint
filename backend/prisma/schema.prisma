@@ -1,0 +1,90 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EMPLOYEE
+  CUSTOMER
+}
+
+enum ProjectType {
+  RESIDENTIAL
+  COMMERCIAL
+}
+
+enum QuoteProblem {
+  INTIMITE
+  CHALEUR
+  UV
+  SECURITE
+}
+
+enum ProjectScope {
+  UNE_FENETRE
+  QUELQUES_FENETRES
+  FACADE_COMPLETE
+  BATIMENT_COMPLET
+}
+
+enum WindowAge {
+  PLUS_DE_10_ANS
+  MOINS_DE_10_ANS
+  INCONNU
+}
+
+enum ContactTime {
+  AM
+  DEBUT_PM
+  FIN_PM
+  SOIREE
+}
+
+enum QuoteStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  WON
+  LOST
+}
+
+model User {
+  id           String      @id @default(cuid())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  email        String      @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         UserRole    @default(CUSTOMER)
+  isActive     Boolean     @default(true)
+  quotes       Quote[]
+}
+
+model Quote {
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  firstName       String
+  lastName        String
+  email           String
+  phone           String
+  city            String
+  projectType     ProjectType
+  problems        QuoteProblem[]
+  projectScope    ProjectScope
+  windowAge       WindowAge
+  measurements    String?
+  bestContactTime ContactTime
+  notes           String?
+  status          QuoteStatus   @default(NEW)
+  ownerId         String?
+  owner           User?         @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+}

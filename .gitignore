@@ -1,0 +1,9 @@
+.DS_Store
+.pnpm-store/
+
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
