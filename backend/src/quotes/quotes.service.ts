@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ContactTime,
   Prisma,
@@ -63,7 +64,12 @@ const quoteSummarySelect = {
 
 @Injectable()
 export class QuotesService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(QuotesService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService,
+  ) {}
 
   findAll() {
     return this.prisma.quote.findMany({
@@ -87,10 +93,10 @@ export class QuotesService {
     return quote;
   }
 
-  create(dto: CreateQuoteDto) {
+  async create(dto: CreateQuoteDto) {
     const problems = (dto.problemes ?? []).map((problem) => problemMap[problem]);
 
-    return this.prisma.quote.create({
+    const quote = await this.prisma.quote.create({
       data: {
         firstName: dto.prenom.trim(),
         lastName: dto.nom.trim(),
@@ -110,6 +116,23 @@ export class QuotesService {
         status: true,
       },
     });
+
+    void this.sendNotificationEmail({
+      prenom: dto.prenom.trim(),
+      nom: dto.nom.trim(),
+      courriel: dto.courriel.trim().toLowerCase(),
+      telephone: dto.telephone.trim(),
+      ville: dto.ville.trim(),
+      typeProjet: dto.type_projet,
+      problemes: dto.problemes ?? [],
+      envergure: dto.envergure,
+      ageFenetres: dto.age_fenetres,
+      mesures: dto.mesures?.trim() || '',
+      momentContact: dto.moment_contact,
+      quoteId: quote.id,
+    });
+
+    return quote;
   }
 
   async updateStatus(id: string, status: keyof typeof QuoteStatus) {
@@ -134,6 +157,65 @@ export class QuotesService {
       }
 
       throw error;
+    }
+  }
+
+  private async sendNotificationEmail(payload: {
+    prenom: string;
+    nom: string;
+    courriel: string;
+    telephone: string;
+    ville: string;
+    typeProjet: string;
+    problemes: string[];
+    envergure: string;
+    ageFenetres: string;
+    mesures: string;
+    momentContact: string;
+    quoteId: string;
+  }) {
+    const apiKey = this.config.get<string>('RESEND_API_KEY');
+    const from = this.config.get<string>('NOTIFICATION_FROM');
+    const to = this.config.get<string>('NOTIFICATION_TO');
+
+    if (!apiKey || !from || !to) {
+      this.logger.warn('Resend notification skipped: missing email environment variables');
+      return;
+    }
+
+    const lines = [
+      'Nouvelle soumission Pure Tint',
+      '',
+      `ID: ${payload.quoteId}`,
+      `Nom: ${payload.prenom} ${payload.nom}`,
+      `Courriel: ${payload.courriel}`,
+      `Telephone: ${payload.telephone}`,
+      `Ville: ${payload.ville}`,
+      `Type de projet: ${payload.typeProjet}`,
+      `Problemes: ${payload.problemes.join(', ') || 'Aucun'}`,
+      `Envergure: ${payload.envergure}`,
+      `Age des fenetres: ${payload.ageFenetres}`,
+      `Mesures: ${payload.mesures || 'Non precisees'}`,
+      `Moment de contact: ${payload.momentContact}`,
+    ];
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject: 'Nouvelle soumission Pure Tint',
+        text: lines.join('\n'),
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      this.logger.error(`Resend notification failed: ${response.status} ${errorText}`);
     }
   }
 }
