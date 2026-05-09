@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260508-2" />
+    <link rel="stylesheet" href="./styles.css?v=20260509-1" />
   </head>
   <body>
     <header class="site-header">
@@ -614,7 +614,7 @@
       const langButtons = document.querySelectorAll(".lang-button");
       const quoteForm = document.getElementById("quote-form");
       const formStatus = document.getElementById("form-status");
-      const apiBase = window.PURETINT_API_BASE || "http://127.0.0.1:3000/api";
+      const apiBase = window.PURETINT_API_BASE || "https://puretint-api.onrender.com/api";
       function applyLanguage(lang) {
         const dict = translations[lang];
         html.lang = lang;
