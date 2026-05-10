@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pure Tint Admin</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./admin.css?v=20260510-1" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="login-view" id="login-view">
+        <div class="login-panel">
+          <div>
+            <p class="eyebrow">Pure Tint CRM</p>
+            <h1>Connexion admin</h1>
+            <p class="muted">Accedez aux demandes de soumission recues depuis le site.</p>
+          </div>
+
+          <form id="login-form" class="login-form">
+            <label>
+              <span>Courriel</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              <span>Mot de passe</span>
+              <input
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                minlength="8"
+                required
+              />
+            </label>
+            <p class="form-status" id="login-status" role="status" hidden></p>
+            <button type="submit" class="primary-action">Se connecter</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="dashboard-view" id="dashboard-view" hidden>
+        <header class="admin-header">
+          <div>
+            <p class="eyebrow">Pure Tint CRM</p>
+            <h1>Soumissions</h1>
+          </div>
+          <div class="header-actions">
+            <button type="button" class="secondary-action" id="refresh-button">Rafraichir</button>
+            <button type="button" class="ghost-action" id="logout-button">Deconnexion</button>
+          </div>
+        </header>
+
+        <section class="stats-strip" aria-label="Statistiques">
+          <div>
+            <span id="stat-total">0</span>
+            <small>Total</small>
+          </div>
+          <div>
+            <span id="stat-new">0</span>
+            <small>Nouvelles</small>
+          </div>
+          <div>
+            <span id="stat-contacted">0</span>
+            <small>Contactees</small>
+          </div>
+        </section>
+
+        <section class="quotes-shell">
+          <aside class="quotes-list" id="quotes-list" aria-label="Liste des soumissions"></aside>
+
+          <article class="quote-detail" id="quote-detail">
+            <div class="empty-state">
+              <h2>Aucune soumission selectionnee</h2>
+              <p>Choisissez une demande dans la liste pour voir les details.</p>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const apiBase = window.PURETINT_API_BASE || "https://puretint-api.onrender.com/api";
+      const tokenKey = "pureTintAdminToken";
+      const statusLabels = {
+        NEW: "Nouvelle",
+        CONTACTED: "Contactee",
+        QUALIFIED: "Qualifiee",
+        WON: "Gagnee",
+        LOST: "Perdue"
+      };
+
+      const loginView = document.getElementById("login-view");
+      const dashboardView = document.getElementById("dashboard-view");
+      const loginForm = document.getElementById("login-form");
+      const loginStatus = document.getElementById("login-status");
+      const quotesList = document.getElementById("quotes-list");
+      const quoteDetail = document.getElementById("quote-detail");
+      const refreshButton = document.getElementById("refresh-button");
+      const logoutButton = document.getElementById("logout-button");
+      const statTotal = document.getElementById("stat-total");
+      const statNew = document.getElementById("stat-new");
+      const statContacted = document.getElementById("stat-contacted");
+
+      let quotes = [];
+      let selectedQuoteId = null;
+
+      function getToken() {
+        return window.localStorage.getItem(tokenKey);
+      }
+
+      function setStatus(node, message, kind = "error") {
+        node.hidden = false;
+        node.textContent = message;
+        node.dataset.kind = kind;
+      }
+
+      function showDashboard() {
+        loginView.hidden = true;
+        dashboardView.hidden = false;
+      }
+
+      function showLogin() {
+        loginView.hidden = false;
+        dashboardView.hidden = true;
+      }
+
+      async function apiFetch(path, options = {}) {
+        const token = getToken();
+        const response = await fetch(`${apiBase}${path}`, {
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(options.headers || {})
+          }
+        });
+
+        if (response.status === 401) {
+          window.localStorage.removeItem(tokenKey);
+          showLogin();
+          throw new Error("Session expiree. Reconnectez-vous.");
+        }
+
+        if (!response.ok) {
+          throw new Error(`Erreur API ${response.status}`);
+        }
+
+        return response.json();
+      }
+
+      function formatDate(value) {
+        return new Intl.DateTimeFormat("fr-CA", {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(value));
+      }
+
+      function renderStats() {
+        statTotal.textContent = quotes.length.toString();
+        statNew.textContent = quotes.filter((quote) => quote.status === "NEW").length.toString();
+        statContacted.textContent = quotes
+          .filter((quote) => quote.status === "CONTACTED")
+          .length.toString();
+      }
+
+      function renderList() {
+        if (!quotes.length) {
+          quotesList.innerHTML = '<div class="list-empty">Aucune soumission pour le moment.</div>';
+          return;
+        }
+
+        quotesList.innerHTML = quotes
+          .map((quote) => {
+            const isActive = quote.id === selectedQuoteId ? "is-active" : "";
+            return `
+              <button type="button" class="quote-row ${isActive}" data-id="${quote.id}">
+                <span class="row-top">
+                  <strong>${quote.firstName} ${quote.lastName}</strong>
+                  <span class="status-pill status-${quote.status.toLowerCase()}">${statusLabels[quote.status] || quote.status}</span>
+                </span>
+                <span class="row-meta">${quote.city} · ${quote.phone}</span>
+                <span class="row-date">${formatDate(quote.createdAt)}</span>
+              </button>
+            `;
+          })
+          .join("");
+      }
+
+      function renderDetail() {
+        const quote = quotes.find((item) => item.id === selectedQuoteId);
+
+        if (!quote) {
+          quoteDetail.innerHTML = `
+            <div class="empty-state">
+              <h2>Aucune soumission selectionnee</h2>
+              <p>Choisissez une demande dans la liste pour voir les details.</p>
+            </div>
+          `;
+          return;
+        }
+
+        quoteDetail.innerHTML = `
+          <div class="detail-header">
+            <div>
+              <p class="eyebrow">${formatDate(quote.createdAt)}</p>
+              <h2>${quote.firstName} ${quote.lastName}</h2>
+              <p class="muted">${quote.city}</p>
+            </div>
+            <label class="status-control">
+              <span>Statut</span>
+              <select id="status-select">
+                ${Object.entries(statusLabels)
+                  .map(
+                    ([value, label]) =>
+                      `<option value="${value}" ${quote.status === value ? "selected" : ""}>${label}</option>`,
+                  )
+                  .join("")}
+              </select>
+            </label>
+          </div>
+
+          <div class="detail-grid">
+            <div><span>Courriel</span><a href="mailto:${quote.email}">${quote.email}</a></div>
+            <div><span>Telephone</span><a href="tel:${quote.phone}">${quote.phone}</a></div>
+            <div><span>Type de projet</span><strong>${quote.projectType}</strong></div>
+            <div><span>Problemes</span><strong>${quote.problems.join(", ") || "Aucun"}</strong></div>
+            <div><span>Envergure</span><strong>${quote.projectScope}</strong></div>
+            <div><span>Age des fenetres</span><strong>${quote.windowAge}</strong></div>
+            <div><span>Mesures</span><strong>${quote.measurements || "Non precisees"}</strong></div>
+            <div><span>Moment de contact</span><strong>${quote.bestContactTime}</strong></div>
+          </div>
+        `;
+
+        document.getElementById("status-select").addEventListener("change", async (event) => {
+          await updateQuoteStatus(quote.id, event.target.value);
+        });
+      }
+
+      async function loadQuotes() {
+        quotes = await apiFetch("/quotes");
+        if (!selectedQuoteId && quotes.length) {
+          selectedQuoteId = quotes[0].id;
+        }
+        renderStats();
+        renderList();
+        renderDetail();
+      }
+
+      async function updateQuoteStatus(id, status) {
+        const updated = await apiFetch(`/quotes/${id}/status`, {
+          method: "PATCH",
+          body: JSON.stringify({ status })
+        });
+
+        quotes = quotes.map((quote) =>
+          quote.id === id ? { ...quote, status: updated.status } : quote,
+        );
+        renderStats();
+        renderList();
+        renderDetail();
+      }
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        loginStatus.hidden = true;
+
+        const formData = new FormData(loginForm);
+        const email = formData.get("email").toString().trim();
+        const password = formData.get("password").toString();
+
+        try {
+          const data = await fetch(`${apiBase}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          }).then(async (response) => {
+            if (!response.ok) throw new Error("Connexion refusee.");
+            return response.json();
+          });
+
+          window.localStorage.setItem(tokenKey, data.accessToken);
+          showDashboard();
+          await loadQuotes();
+        } catch (error) {
+          setStatus(loginStatus, error.message || "Impossible de se connecter.");
+        }
+      });
+
+      quotesList.addEventListener("click", (event) => {
+        const row = event.target.closest(".quote-row");
+        if (!row) return;
+        selectedQuoteId = row.dataset.id;
+        renderList();
+        renderDetail();
+      });
+
+      refreshButton.addEventListener("click", () => {
+        void loadQuotes();
+      });
+
+      logoutButton.addEventListener("click", () => {
+        window.localStorage.removeItem(tokenKey);
+        selectedQuoteId = null;
+        quotes = [];
+        showLogin();
+      });
+
+      if (getToken()) {
+        showDashboard();
+        loadQuotes().catch(() => showLogin());
+      }
+    </script>
+  </body>
+</html>

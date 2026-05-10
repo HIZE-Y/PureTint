@@ -30,7 +30,7 @@ export class AuthService {
       passwordHash,
       firstName: dto.firstName,
       lastName: dto.lastName,
-      role: dto.role ?? 'CUSTOMER',
+      role: 'CUSTOMER',
     });
 
     return this.buildAuthResponse(user.id, user.email, user.role);
