@@ -131,6 +131,11 @@ export class QuotesService {
       momentContact: dto.moment_contact,
       quoteId: quote.id,
     });
+    void this.sendCustomerConfirmationEmail({
+      prenom: dto.prenom.trim(),
+      courriel: dto.courriel.trim().toLowerCase(),
+      quoteId: quote.id,
+    });
 
     return quote;
   }
@@ -199,23 +204,82 @@ export class QuotesService {
       `Moment de contact: ${payload.momentContact}`,
     ];
 
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: 'Nouvelle soumission Pure Tint',
-        text: lines.join('\n'),
-      }),
+    await this.sendEmail({
+      apiKey,
+      from,
+      to,
+      subject: 'Nouvelle soumission Pure Tint',
+      text: lines.join('\n'),
+      logLabel: 'internal notification',
     });
+  }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      this.logger.error(`Resend notification failed: ${response.status} ${errorText}`);
+  private async sendCustomerConfirmationEmail(payload: {
+    prenom: string;
+    courriel: string;
+    quoteId: string;
+  }) {
+    const apiKey = this.config.get<string>('RESEND_API_KEY');
+    const from = this.config.get<string>('NOTIFICATION_FROM');
+
+    if (!apiKey || !from) {
+      this.logger.warn('Resend customer confirmation skipped: missing email environment variables');
+      return;
+    }
+
+    const lines = [
+      `Bonjour ${payload.prenom},`,
+      '',
+      'Merci pour votre demande de soumission avec Pure Tint.',
+      'Nous avons bien recu votre demande et nous vous contacterons rapidement pour discuter de votre projet.',
+      '',
+      `Numero de demande: ${payload.quoteId}`,
+      '',
+      'Pure Tint',
+      'Services de pellicules pour fenetres au Quebec',
+    ];
+
+    await this.sendEmail({
+      apiKey,
+      from,
+      to: payload.courriel,
+      subject: 'Confirmation de votre demande Pure Tint',
+      text: lines.join('\n'),
+      logLabel: 'customer confirmation',
+    });
+  }
+
+  private async sendEmail(payload: {
+    apiKey: string;
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+    logLabel: string;
+  }) {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${payload.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: payload.from,
+          to: [payload.to],
+          subject: payload.subject,
+          text: payload.text,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        this.logger.error(
+          `Resend ${payload.logLabel} failed: ${response.status} ${errorText}`,
+        );
+      }
+    } catch (error) {
+      this.logger.error(`Resend ${payload.logLabel} failed`, error);
     }
   }
 }
