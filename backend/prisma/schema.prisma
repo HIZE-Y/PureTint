@@ -88,3 +88,16 @@ model Quote {
   ownerId         String?
   owner           User?         @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 }
+
+model SiteVisit {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  sessionId String
+  path      String
+  language  String?
+  referrer  String?
+  userAgent String?
+
+  @@index([createdAt])
+  @@index([sessionId])
+}

@@ -69,6 +69,14 @@
             <span id="stat-contacted">0</span>
             <small>Contactees</small>
           </div>
+          <div>
+            <span id="stat-visits">0</span>
+            <small>Visites</small>
+          </div>
+          <div>
+            <span id="stat-unique">0</span>
+            <small>Visiteurs uniques</small>
+          </div>
         </section>
 
         <section class="quotes-shell">
@@ -106,9 +114,12 @@
       const statTotal = document.getElementById("stat-total");
       const statNew = document.getElementById("stat-new");
       const statContacted = document.getElementById("stat-contacted");
+      const statVisits = document.getElementById("stat-visits");
+      const statUnique = document.getElementById("stat-unique");
 
       let quotes = [];
       let selectedQuoteId = null;
+      let analyticsSummary = null;
 
       function getToken() {
         return window.localStorage.getItem(tokenKey);
@@ -167,6 +178,12 @@
         statContacted.textContent = quotes
           .filter((quote) => quote.status === "CONTACTED")
           .length.toString();
+        statVisits.textContent = analyticsSummary
+          ? analyticsSummary.totalVisits.toString()
+          : "0";
+        statUnique.textContent = analyticsSummary
+          ? analyticsSummary.uniqueVisitors.toString()
+          : "0";
       }
 
       function renderList() {
@@ -243,7 +260,13 @@
       }
 
       async function loadQuotes() {
-        quotes = await apiFetch("/quotes");
+        const [quotesResponse, analyticsResponse] = await Promise.all([
+          apiFetch("/quotes"),
+          apiFetch("/analytics/summary").catch(() => null)
+        ]);
+
+        quotes = quotesResponse;
+        analyticsSummary = analyticsResponse;
         if (!selectedQuoteId && quotes.length) {
           selectedQuoteId = quotes[0].id;
         }

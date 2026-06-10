@@ -615,6 +615,7 @@
       const quoteForm = document.getElementById("quote-form");
       const formStatus = document.getElementById("form-status");
       const apiBase = window.PURETINT_API_BASE || "https://puretint-api.onrender.com/api";
+      const visitSessionKey = "pureTintVisitSession";
       function applyLanguage(lang) {
         const dict = translations[lang];
         html.lang = lang;
@@ -653,6 +654,38 @@
       langButtons.forEach((button) => {
         button.addEventListener("click", () => applyLanguage(button.dataset.lang));
       });
+
+      function getVisitSessionId() {
+        const existingSession = window.localStorage.getItem(visitSessionKey);
+        if (existingSession) return existingSession;
+
+        const newSession =
+          window.crypto && window.crypto.randomUUID
+            ? window.crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        window.localStorage.setItem(visitSessionKey, newSession);
+        return newSession;
+      }
+
+      function trackVisit() {
+        const payload = {
+          sessionId: getVisitSessionId(),
+          path: window.location.pathname || "/",
+          language: document.documentElement.lang || "fr",
+          referrer: document.referrer || ""
+        };
+
+        fetch(`${apiBase}/analytics/visit`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(() => {
+          // Analytics should never affect the user experience.
+        });
+      }
 
       function setFormStatus(kind, message) {
         if (!formStatus) return;
@@ -729,6 +762,7 @@
       const savedLanguage = window.localStorage.getItem("pureTintLanguage");
       const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith("fr") ? "fr" : "en";
       applyLanguage(savedLanguage || browserLanguage || "fr");
+      trackVisit();
     </script>
   </body>
 </html>
