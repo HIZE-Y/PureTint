@@ -4,8 +4,8 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm build
-    startCommand: pnpm start:prod
+    buildCommand: npx pnpm@11.0.9 install --frozen-lockfile && npx pnpm@11.0.9 prisma:generate && npx pnpm@11.0.9 build
+    startCommand: npx pnpm@11.0.9 start:prod
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
